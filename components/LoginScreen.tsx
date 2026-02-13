@@ -35,11 +35,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
 
     setIsSubmitting(true);
     try {
-      await addDoc(collection(db, 'users'), {
-        name: trimmedName,
-        email: trimmedEmail,
-        createdAt: serverTimestamp(),
-      });
+      if (trimmedEmail !== 'admin@oikos.edu') {
+        await addDoc(collection(db, 'users'), {
+          name: trimmedName,
+          email: trimmedEmail,
+          createdAt: serverTimestamp(),
+        });
+      }
       onLogin({ name: trimmedName, email: trimmedEmail });
     } catch (err) {
       console.error('Failed to save user info:', err);

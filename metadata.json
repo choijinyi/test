@@ -1,0 +1,5 @@
+{
+  "name": "DISC 행동유형 평가서 (DISC Personality Test)",
+  "description": "A web application that allows users to take the DISC assessment test. Users answer a series of questions by ranking options to determine their personality profile according to the DISC model. The results include a score breakdown, a visual chart, and a detailed profile description.",
+  "requestFramePermissions": []
+}

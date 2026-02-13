@@ -10,14 +10,13 @@ interface LoginScreenProps {
 const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const isValidEmail = (email: string): boolean => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -33,20 +32,14 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
       return;
     }
 
-    setIsSubmitting(true);
     if (trimmedEmail !== 'admin@oikos.edu') {
-      try {
-        await addDoc(collection(db, 'users'), {
-          name: trimmedName,
-          email: trimmedEmail,
-          createdAt: serverTimestamp(),
-        });
-      } catch (err) {
-        console.error('Failed to save user info:', err);
-      }
+      addDoc(collection(db, 'users'), {
+        name: trimmedName,
+        email: trimmedEmail,
+        createdAt: serverTimestamp(),
+      }).catch(err => console.error('Failed to save user info:', err));
     }
     onLogin({ name: trimmedName, email: trimmedEmail });
-    setIsSubmitting(false);
   };
 
   return (
@@ -100,10 +93,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
 
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full px-10 py-4 bg-white text-purple-700 font-bold text-lg rounded-full hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white/40 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="w-full px-10 py-4 bg-white text-purple-700 font-bold text-lg rounded-full hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white/40 shadow-lg"
           >
-            {isSubmitting ? '처리 중...' : '시작하기'}
+            시작하기
           </button>
         </form>
 

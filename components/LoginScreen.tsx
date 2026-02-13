@@ -34,21 +34,19 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     }
 
     setIsSubmitting(true);
-    try {
-      if (trimmedEmail !== 'admin@oikos.edu') {
+    if (trimmedEmail !== 'admin@oikos.edu') {
+      try {
         await addDoc(collection(db, 'users'), {
           name: trimmedName,
           email: trimmedEmail,
           createdAt: serverTimestamp(),
         });
+      } catch (err) {
+        console.error('Failed to save user info:', err);
       }
-      onLogin({ name: trimmedName, email: trimmedEmail });
-    } catch (err) {
-      console.error('Failed to save user info:', err);
-      setError('저장에 실패했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsSubmitting(false);
     }
+    onLogin({ name: trimmedName, email: trimmedEmail });
+    setIsSubmitting(false);
   };
 
   return (
